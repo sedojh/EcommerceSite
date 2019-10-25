@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ISS GDipSA IT Mart</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar-fixed-top" style="background-color:#222629; ">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="~/Products/ListProducts">
+                    <img class="img-responsive" style="width:40px" alt="Brand" src="~/Images/Gamerepository_logo.png">
+                </a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>@Html.ActionLink("Contact", "Contact", "Home", null, new { @style = "color:orangered" })</li>
+                <li>@Html.ActionLink("Sign Up", "New", "Register", null, new { @style = "color:orangered" })</li>
+            </ul>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @{
+        ViewBag.Title = "Login";
+        string str;
+        var errDict = (Dictionary<string, string>)ViewData["errDict"];
+        var wrong = ViewBag.wrong;
+        Layout = "";
+    }
+
+
+    <h2 align="center">Login</h2>
+    <br />
+
+    <form action="~/Home/Login" method="POST">
+        <div class="form-inline">
+            <table align="center">
+                <tr>
+                    <td align="center">
+                        <label>Username : </label>
+                        <input name="username" id="username" class="form-control" placeholder="Username" />
+                    </td>
+                    <td></td>
+                    <td>
+                        @{
+                            @*Will display server validation errors if the username is submitted without any input*@
+                            if (errDict != null)
+                            {
+                                if (errDict.TryGetValue("username", out str))
+                                {
+                                    <b><span style="color:red" class="field-validation-error">@str</span></b>
+                                }
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr><td>&nbsp;</td></tr>
+                <tr>
+                    <td align="center">
+                        <label>Password : </label>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Password" />
+                    </td>
+                    <td></td>
+                    <td>
+                        @{
+                            @*Will display server validation errors if the password is submitted without any input*@
+                            if (errDict != null)
+                            {
+                                if (errDict.TryGetValue("password", out str))
+                                {
+                                    <b><span style="color:red" class="field-validation-error">@str</span></b>
+                                }
+                            }
+                        }
+                    </td>
+                </tr>
+                @{
+                    if (wrong == 0)
+                    {
+                        <tr>
+                            <td>
+                                <b><span style="color:red">Incorrect Username and Password</span></b>
+                            </td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <td align="left">
+                        <br /><br />
+                        <button type="submit" class="btn btn-danger" style="display:inline" formaction="~/Home/Forgot"><span style="font-size:smaller">Forgot Username/Password?</span></button>
+                        <button type="submit" style="display:inline; float:right" class="btn btn-success" value="Submit">Log In</button>
+                        <br />
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+    </form>
+    <div class="container body-content">
+        <hr />
+        <footer>
+            <p style="float:right">&copy; @DateTime.Now.Year - GDipSA Cohort-49 Team 2b</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

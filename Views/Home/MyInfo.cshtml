@@ -1,0 +1,26 @@
+﻿@model CAProject.Models.Customer
+@using CAProject.Models
+@{
+    ViewBag.Title = "MyInfo";
+    Customer customer = (Customer)ViewBag.customer;
+}
+
+<h2>My Account</h2>
+
+    <div class="list-group" style="width:500px; margin:0 auto; " >
+        <a class="list-group-item active">
+            My Account
+        </a>
+        <div align="center">
+        <a class="list-group-item"><b>Name : </b> @customer.Name</a>
+        <a class="list-group-item"><b>Email : </b> @customer.Email</a>
+        <a class="list-group-item"><b>Phone : </b> @customer.Phone</a>
+        <a class="list-group-item"><b>Address : </b> @customer.Address</a>
+        <a class="list-group-item"><b>Postal Code : </b> @customer.Postalcode</a>
+        </div>
+    </div>
+<br />
+<br />
+
+
+

@@ -1,0 +1,103 @@
+﻿@model CAProject.Models.OrderQuantity
+@using CAProject.Models
+@using CAProject.DB
+
+@{
+    ViewBag.Title = "MyPurchases";
+    var orderhistory = (List<OrderQuantity>)ViewBag.orderhistory;
+    var orderdates = (List<Order>)ViewBag.orderdates;
+    var orderdetails = (List<OrderDetails>)ViewBag.orderdetails;
+}
+
+
+
+<h2>My Purchases</h2>
+
+@{
+    @*if no order history, display this*@
+    if (orderdates.Count == 0)
+    {
+        <p align="center" style="font-size:22px"><b>You have not ordered from us before.</b> </p>
+    }
+
+    else
+    {
+        @* a for loop to loop through all products ordered. Products are nto distinct i.e repeated products*@
+        for (int i = 0; i < orderhistory.Count; i++)
+        {
+            <div class="panel panel-danger">
+                <div class="row">
+                    <br />
+                    <div class="col-xs-6" align="center" style="padding-left:30px">
+                        @Html.Partial("_Product" + orderhistory[i].Product_Id)
+                    </div>
+                    <div class="col-xs-6">
+                        <br /><br />
+                        <b>Purchased On : </b>
+                        @{
+                            @*this loop will go through all orders which the primary key is the orderid*@
+                            for (int j = 0; j < orderdates.Count; j++)
+                            {
+                                if (orderhistory[i].Order_Id == orderdates[j].Id)
+                                {
+                                    @*if orderdate tallies, display the orderdate*@
+                                    @orderdates[j].OrderDate
+                                    <br />
+                                    @:<b>Order ID : </b> @orderdates[j].Id
+                                }
+                            }
+                        }
+                        <br />
+                        <b>Quantity : </b> @orderhistory[i].Quantity
+                        <br />
+                        <b>Subtotal : </b> $@{
+                            Product product = ProductData.GetProduct(orderhistory[i].Product_Id);
+                            double discount = OrderData.GetDiscount(orderhistory[i].Order_Id);
+                            double subtotal = product.Price * orderhistory[i].Quantity * discount;
+                            @subtotal
+                        }
+                        <br />
+                        <b>Activation Code : </b>
+                        @*To determine if the quantity is 1 or more.If quantity is 1, it will just display*@
+                        @{
+                            if (orderhistory[i].Quantity == 1)
+                            {
+                                for (int k = 0; k < orderdetails.Count; k++)
+                                {
+                                    if ((orderhistory[i].Product_Id == orderdetails[k].Product_Id) && (orderhistory[i].Order_Id == orderdetails[k].Order_Id))
+                                    {
+                                        @orderdetails[k].ActivationCode
+                                    }
+
+                                }
+                            }
+                            @*If quantity is more than 1, it will display a dropdown select html tag*@
+                            else
+                            {
+                                <select>
+                                    @{
+                                        for (int k = 0; k < orderdetails.Count; k++)
+                                        {
+                                            if ((orderhistory[i].Product_Id == orderdetails[k].Product_Id) && (orderhistory[i].Order_Id == orderdetails[k].Order_Id))
+                                            {
+                                                <option> @orderdetails[k].ActivationCode</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            }
+                        }
+
+                    </div>
+                    <br />
+                </div>
+            </div>
+        }
+
+    }
+}
+
+<a style="float:right" class="btn btn-warning btn-lg" href="~/Products/ListProducts">Continue Shopping</a>
+
+<br />
+<br />

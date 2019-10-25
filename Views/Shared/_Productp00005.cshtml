@@ -1,0 +1,11 @@
+﻿@model CAProject.Models.Product
+@using CAProject.DB
+@using CAProject.Models
+@{
+    Product product = ProductData.GetProduct("p00005");
+}
+
+<img style="display: block; margin: 0 auto;" class="img-rounded" width="150" height="150" src="~/Images/product05pic.jpg" />
+<p align="center" style="font-size:25px"><b>Name: @product.Name</b></p>
+<p align="center" style="font-size:22px"><b>Unit Price: $@product.Price</b></p>
+<p align="justify"><i>@product.Description</i></p>

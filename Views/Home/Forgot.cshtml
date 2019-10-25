@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ISS GDipSA IT Mart</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar-fixed-top" style="background-color:#222629; ">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="~/Products/ListProducts">
+                    <img class="img-responsive" style="width:40px" alt="Brand" src="~/Images/Gamerepository_logo.png">
+                </a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>@Html.ActionLink("Contact", "Contact", "Home", null, new { @style = "color:orangered" })</li>
+                <li>@Html.ActionLink("Sign Up", "New", "Register", null, new { @style = "color:orangered" })</li>
+            </ul>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @{
+        ViewBag.Title = "Forgot your username or password?";
+        string invalid = (string)ViewBag.invalid;
+        Layout = "";
+    }
+    <br />
+    <br />
+    <p align="center"><b>Please enter your email address and your log in details will be sent to you</b></p>
+
+    @{
+        if (invalid == null || invalid == "")
+        {
+            <form action="~/Home/Forgot" method="POST">
+                <table align="center">
+                    <tr>
+                        <td>
+                            <label>Email Address : &nbsp;</label>
+                        </td>
+                        <td>
+                            <input type="text" name="email" id="email" class="form-control" placeholder="Email Address" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td align="right">
+
+                            <button type="submit" class="btn btn-success" name="submit">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        }
+
+        else
+        {
+            <form action="~/Home/Forgot" method="POST">
+                <table align="center">
+                    <tr>
+                        <td>
+                            <label>Email Address:</label>
+                        </td>
+                        <td>
+                            <input type="text" name="email" id="email" class="form-control" placeholder="Email Address" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="color:red"><b>Invalid Email!</b></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td align="right">
+                            <button type="submit" class="btn btn-success" name="submit">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        }
+    }
+
+    <div class="container body-content">
+        <hr />
+        <footer>
+            <p style="float:right">&copy; @DateTime.Now.Year - GDipSA Cohort-49 Team 2b</p>
+        </footer>
+    </div>
+</body>
+</html>
+

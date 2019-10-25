@@ -1,0 +1,47 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ISS GDipSA IT Mart</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar-fixed-top" style="background-color:#222629; ">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="~/Products/ListProducts">
+                    <img class="img-responsive" style="width:40px" alt="Brand" src="~/Images/Gamerepository_logo.png">
+                </a>
+            </div>
+            <ul class="nav navbar-nav">
+
+                <li>@Html.ActionLink("Products", "ListProducts", "Products", null, new { @style = "color:orangered" })</li>
+                <li>@Html.ActionLink("Cart", "ViewCart", "Products", null, new { @style = "color:orangered" })</li>
+                <li>@Html.ActionLink("My Past Orders", "MyPurchases", "MyPurchases", null, new { @style = "color:orangered" })</li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>@Html.ActionLink("Contact", "Contact", "Home", null, new { @style = "color:orangered" })</li>
+                <li>@Html.ActionLink("My Account", "MyInfo", "Home", null, new { @style = "color:orangered" })</li>
+                <li>@Html.ActionLink("Logout", "Logout", "Home", null, new { @style = "color:orangered" })</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p style="float:right">&copy; @DateTime.Now.Year - GDipSA Cohort-49 Team 2b</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

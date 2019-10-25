@@ -1,0 +1,181 @@
+﻿@model CAProject.Models.Product
+@using CAProject.DB
+@using CAProject.Models
+@{
+    ViewBag.Title = "Home";
+    var cart = (List<Product>)Session["cart"];
+    string username = (string)Session["username"];
+    List<Product> allproducts = ProductData.GetAllProducts();
+    string searchStr = (string)ViewBag.searchStr;
+    var found = false;
+    int cartnumber = 0;
+    if (cart != null)
+    {
+        cartnumber = cart.Count;
+    }
+}
+
+<form method="POST">
+    <br />
+
+    <p style="display:inline;">
+        <span style="font-size:28px;">Hello, @username</span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+
+        <a class="glyphicon glyphicon-shopping-cart gly" style="color:orangered; display:inline;font-size:25px" href="~/Products/ViewCart"></a>&nbsp; <span style="font-size:23px">Cart Items: @cartnumber</span>
+    </p>
+
+    <div class="search" style="float:right; margin-top:0px; display:inline">
+        <input type="text" name="searchStr" class="form-control input-sm" maxlength="64" placeholder="Search Games..." />
+        <button type="submit" style="background-color:orangered" class="btn btn-sm" formaction="~/Products/ListProducts">Search</button>
+    </div>
+    <br /><br />
+
+    @{ 
+        @*To display the search term if user has searched for something*@
+        if(searchStr != null && searchStr != "")
+        {
+            <p align="center" style="font-size:23px">You searched for :<span style="color:orangered"> @searchStr </span></p>
+        }
+    }
+
+    <div class="row">
+
+        @{
+            @*if no search by user, enter this condition*@
+            if (searchStr == null || searchStr == "")
+            {
+                foreach (Product p in allproducts)
+                {
+                    <div class="col-lg-6">
+                        <div class="panel panel-danger" style="height:400px; padding:20px">
+                            @Html.Partial("_Product" + @p.Id)
+                            <div style="position:absolute;bottom:41px">
+                                <button class="btn btn-danger" style="margin-bottom:0px; position:sticky; width:513px" type="submit" name="product_id" href="~/Products/ListProducts" value="@p.Id">Add To Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            else
+            {
+                foreach (Product p in allproducts)
+                {
+                    @*search through all products*@
+                    var hit = false;
+
+                    SearchResult sr = Find(p.Name, searchStr);
+                    string title = sr.str;
+                    if (sr.found)
+                    {
+                        hit = true;
+                    }
+
+                    sr = Find(p.Description, searchStr);
+                    string author = sr.str;
+                    if (sr.found)
+                    {
+                        hit = true;
+                    }
+
+                    if (searchStr == "" || hit)
+                    {
+                        <div class="col-lg-6">
+                            <div class="panel panel-danger" style="height:400px; padding:20px">
+                                @Html.Partial("_Product" + @p.Id)
+                                <div style="position:absolute;bottom:41px">
+                                    <button class="btn btn-danger" style="margin-bottom:0px; position:sticky; width:513px" type="submit" name="product_id" href="~/Products/ListProducts" value="@p.Id">Add To Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        found = true;
+                    }
+                }
+                @*if no products are found with the search*@
+                if (!found)
+                {
+                    <div class="col-lg-6">
+                        <b>There are no matches for your search.</b>
+                    </div>
+                }
+            }
+        }
+    </div>
+</form>
+
+@functions {
+    //this class will perform the search
+    public class SearchResult
+    {
+        public bool found = false;
+        public string str = "";
+    }
+
+    public SearchResult Find(string hay, string needle)
+    {
+        string str = hay;
+        int start = hay.IndexOf(needle, StringComparison.CurrentCultureIgnoreCase);
+
+        if (start != -1)
+        {
+            str = hay.Substring(0, start) +
+                "<span class='bold_red'>" + hay.Substring(start, needle.Length) + "</span>" +
+                hay.Substring(start + needle.Length);
+        }
+
+        return new SearchResult
+        {
+            found = (start != -1),
+            str = str
+        };
+    }
+}
+
+<style>
+    #search {
+        float: right;
+        margin-top: 9px;
+        width: 250px;
+    }
+
+    .search {
+        padding: 5px 0;
+        width: 230px;
+        height: 30px;
+        position: relative;
+        left: 10px;
+        float: left;
+        line-height: 22px;
+    }
+
+        .search input {
+            position: absolute;
+            width: 0px;
+            float: right;
+            margin-left: 210px;
+            -webkit-transition: all 0.7s ease-in-out;
+            -moz-transition: all 0.7s ease-in-out;
+            -o-transition: all 0.7s ease-in-out;
+            transition: all 0.7s ease-in-out;
+            height: 30px;
+            line-height: 18px;
+            padding: 0 2px 0 2px;
+            border-radius: 1px;
+        }
+
+            .search:hover input, .search input:focus {
+                width: 200px;
+                margin-left: 0px;
+            }
+
+    .btn {
+        height: 30px;
+        position: absolute;
+        right: 0;
+        top: 5px;
+        border-radius: 1px;
+        background-color: orangered;
+        color: ghostwhite
+    }
+</style>

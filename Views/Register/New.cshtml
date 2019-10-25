@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ISS GDipSA IT Mart</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar-fixed-top" style="background-color:#222629; ">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="~/Products/ListProducts">
+                    <img class="img-responsive" style="width:40px" alt="Brand" src="~/Images/Gamerepository_logo.png">
+                </a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>@Html.ActionLink("Contact", "Contact", "Home", null, new { @style = "color:orangered" })</li>
+                <li>@Html.ActionLink("Sign Up", "New", "Register", null, new { @style = "color:orangered" })</li>
+            </ul>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @model CAProject.Models.Register
+    @{
+        ViewBag.Title = "New Registration";
+        string usernametaken = (string)ViewBag.userfalse;
+        Layout = "";
+    }
+    <br /><br />
+
+    @using (Html.BeginForm("New", "Register", FormMethod.Post, new { id = "returnForm" }))
+    {
+        <div align="center">
+            <div class="panel panel-info" style="width:40%; padding:20px">
+                <table>
+                    <tr><td>&nbsp;</td><td></td><td></td></tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Name : </b></span> </td>
+                        <td>@Html.TextBoxFor(x => x.name, new { })</td>
+                        <td>@Html.ValidationMessageFor(x => x.name)</td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Username : </b></span></td>
+                        <td>@Html.TextBoxFor(x => x.username, new { })</td>
+                        <td>
+                            @Html.ValidationMessageFor(x => x.username)
+                            @{
+                                if (usernametaken != "")
+                                {
+                                    <span style="color:red"><b>@usernametaken</b></span>
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Password : </b></span></td>
+                        <td>@Html.PasswordFor(x => x.password, new { })</td>
+                        <td>@Html.ValidationMessageFor(x => x.password)</td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Confirm Password : </b></span></td>
+                        <td>@Html.PasswordFor(x => x.confirm_password, new { })</td>
+                        <td>@Html.ValidationMessageFor(x => x.confirm_password)</td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Email : </b></span></td>
+                        <td>@Html.TextBoxFor(x => x.email, new { })</td>
+                        <td>@Html.ValidationMessageFor(x => x.email)</td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Address : </b></span></td>
+                        <td>@Html.TextBoxFor(x => x.address, new { })</td>
+                        <td>@Html.ValidationMessageFor(x => x.address)</td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Postal Code : </b></span></td>
+                        <td>@Html.TextBoxFor(x => x.postalcode, new { })</td>
+                        <td>@Html.ValidationMessageFor(x => x.postalcode)</td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-size:18px"><b>Phone : </b></span></td>
+                        <td>@Html.TextBoxFor(x => x.phone, new { })</td>
+                        <td>@Html.ValidationMessageFor(x => x.phone)</td>
+                    </tr>
+                    <tr><td>&nbsp;</td><td></td><td></td></tr>
+                    <tr>
+                        <td colspan="2" align="right"><input id="submitBtn" type="submit" value="Sign Up" class="btn btn-success btn-lg" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+
+
+    <div class="container body-content">
+        <hr />
+        <footer>
+            <p style="float:right">&copy; @DateTime.Now.Year - GDipSA Cohort-49 Team 2b</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+<style>
+
+    td, tr {
+        padding: 2px
+    }
+
+    .field-validation-error {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
+

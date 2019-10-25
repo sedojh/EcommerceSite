@@ -1,0 +1,155 @@
+﻿@model CAProject.Models.Product
+@using CAProject.Models
+@{
+    ViewBag.Title = "Cart Items";
+
+}
+
+@{
+    var cart = (List<Product>)ViewBag.cart;
+    @*if there are no items in cart*@
+    if (cart == null)
+    {
+        <h2 align="center">There are no items in your cart.</h2>
+        <form method="POST">
+            <table align="center">
+                <tr>
+                    <td align="center">
+                        <a class="btn btn-warning btn-lg" href="~/Products/ListProducts">Continue Shopping</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    }
+
+    @*if there are items in cart*@
+    else
+    {
+        double discount = (double)ViewBag.discount;
+        var distinctcart = (List<Product>)ViewBag.distinctcart;@*Distinct cart contains products with no duplicates*@
+        int[] quantityarr = new int[distinctcart.Count];@*This array will store the quantity of each product inside the distinct cart*@
+        double pricepayable = 0;
+        @*The nested for loops will loop through the cart list and add the quantity into the array. Array index will tally with the distinct cart list.*@
+        for (int i = 0; i < distinctcart.Count; i++)
+        {
+            int counter = 0;
+            for (int j = 0; j < cart.Count; j++)
+            {
+                if (distinctcart[i].Id == cart[j].Id)
+                {
+                    counter++;
+                }
+            }
+            quantityarr[i] = counter;
+        }
+
+        <h2>View Cart</h2>
+
+        @*To display the distinct items in cart.No repetitions*@
+        for (int i = 0; i < distinctcart.Count; i++)
+        {
+            <form method="POST">
+                <div class="panel panel-danger">
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group" style="padding-left:20px">
+                                @Html.Partial("_Product" + @distinctcart[i].Id)
+                                <input type="hidden" name="product_id" id="product_id" value="@distinctcart[i].Id" />
+                            </div>
+                        </div>
+                        <div class="col-xs-6" align="center">
+                            <br /><br />
+                            <div class="form-group" style="font-size:20px">
+                                Price: $@(distinctcart[i].Price * quantityarr[i])
+                                @{
+                                    pricepayable += (distinctcart[i].Price * quantityarr[i]);
+                                }
+                                <br />
+                                @{
+                                    int counter = 0;
+                                    for (int j = 0; j < cart.Count; j++)
+                                    {
+                                        if (distinctcart[i].Id == cart[j].Id)
+                                        {
+                                            counter++;
+                                        }
+                                    }
+                                }
+                                Quantity = <input type="number" name="quantity" id="quantity" value="@counter" min="0" max="99" />
+                                <br />
+                                <br />
+                                <button class="btn btn-success" type="submit" formaction="ViewCart">Update</button>
+                                @*Button to allow updating of cart*@
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    @*To signify the end of the items. To Display the price*@
+                    @{ if (i == (distinctcart.Count - 1))
+                        {
+                            <div class="col-xs-6 col-md-4"></div>
+                            <div class="col-xs-6 col-md-4"></div>
+                            <div class="col-xs-6 col-md-4">
+                                <span style="font-size:20px"><b>Total Price W/GST: $@pricepayable</b></span>
+                            </div>
+                            <div class="col-xs-6 col-md-4"></div>
+                            <div class="col-xs-6 col-md-4"></div>
+                            <div class="col-xs-6 col-md-4">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input style="display:inline; float:left; width:190px" maxlength="15" type="text" name="coupon" id="coupon" class="form-control" placeholder="Coupon Code" />
+                                            <button style="float:right; margin-right:100px; display:inline;height:34px" class="btn btn-primary" type="submit" formaction="ViewCart">Submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            @*if discount applied, 2 new rows will appear with discount and discounted price*@
+                            if (discount != 1.0)
+                            {
+                                <div class="col-xs-6 col-md-4"></div>
+                                <div class="col-xs-6 col-md-4"></div>
+                                <div class="col-xs-6 col-md-4">
+                                    <br />
+                                    <span style="font-size:22px"><b>Discount: @((1.0 - discount) * 100) %</b></span>
+                                </div>
+                                <div class="col-xs-6 col-md-4"></div>
+                                <div class="col-xs-6 col-md-4"></div>
+                                <div class="col-xs-6 col-md-4">
+                                    <span style="font-size:22px"><b>Discounted Price W/GST: $@(pricepayable * discount)</b></span>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </form>
+        }
+        <br />
+        <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-lg-4">
+                <a class="btn btn-warning btn-lg" href="~/Products/ListProducts">Continue Shopping</a>
+                <a class="btn btn-danger btn-lg" href="~/Products/Checkout">Checkout</a>
+            </div>
+        </div>
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
